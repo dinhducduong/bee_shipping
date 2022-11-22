@@ -52,7 +52,7 @@ class ShipingsController extends Controller
             $sub_delivery_status = DB::table('sub_status_deliveries')->find($shipping->sub_delivery_status_id);
 
 
-            Http::post('http://127.0.0.1:8000/create-log-tracking', [
+            Http::post('http://127.0.0.1:8002/api/create-log-tracking', [
                 'shipping_code' => $shipping->shipping_code,
                 'tracking_status_name' => $sub_delivery_status->description_sub_status,
                 'status_name' => $sub_delivery_status->name,
