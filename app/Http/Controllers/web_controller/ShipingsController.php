@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\shipping;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 
 class ShipingsController extends Controller
 {
@@ -47,7 +48,18 @@ class ShipingsController extends Controller
             $shipping->latest_change_status = $shipping->sub_delivery_status_id;
             $shipping->sub_delivery_status_id = (int) $request['update_shipping']['SubDeliveryStatus'];
             $shipping->update();
-            return "Chỉnh sửa đơn hàng " . $shipping->shipping_code . " thành công !";
+            
+            $sub_delivery_status = DB::table('sub_status_deliveries')->find($shipping->sub_delivery_status_id);
+
+
+            Http::post('http://127.0.0.1:8000/create-log-tracking', [
+                'shipping_code' => $shipping->shipping_code,
+                'tracking_status_name' => $sub_delivery_status->description_sub_status,
+                'status_name' => $sub_delivery_status->name,
+            ]);
+
+
+            // return "Chỉnh sửa đơn hàng " . $shipping->shipping_code . " thành công !";
         } catch (\Throwable $th) {
             return "404 not found";
         }

@@ -221,9 +221,9 @@
                     update_shipping: data
                 },
                 success: function(data) {
-                    alert(data)
-                    // console.log(data);
-                    location.reload();
+                    // alert(data)
+                    console.log(data);
+                    // location.reload();
                 }
             });
         })

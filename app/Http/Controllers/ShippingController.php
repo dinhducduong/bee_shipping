@@ -65,7 +65,6 @@ class ShippingController extends Controller
                 ];
                 ship_detail::create($item);
             }
-            // return $data;
 
             $delivery_status = DB::table('delivery_status')->find($new_shipping->delivery_status_id);
             $sub_delivery_status = DB::table('sub_status_deliveries')->find($new_shipping->sub_delivery_status_id);
