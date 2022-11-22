@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ship_detail;
+use App\Models\shipping;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -44,14 +46,15 @@ class ShippingController extends Controller
                 'ship_to' =>  $request->ship_to,
                 'weight' =>  $request->weight,
                 'height' =>  $request->height,
-                'delivery_status_id' => 1,
-                'sub_delivery_status_id' => 46,
-                'latest_change_status' => 46,
+                'delivery_status_id' => 4,
+                'sub_delivery_status_id' => 63,
+                'latest_change_status' => 63,
                 'lastest_checkpoint_time' => Carbon::now(),
                 'note' =>  $request->note,
             ];
+            
+            $new_shipping = shipping::create($data);
 
-            $new_shipping = DB::table('shippings')->create($data);
             foreach ($request->ship_detail as $value) {
                 $item = [
                     "ship_id" => $new_shipping->id,
@@ -60,8 +63,9 @@ class ShippingController extends Controller
                     "quantity" => $value['quantity'],
                     "price" => $value['price']
                 ];
-                DB::table('ship_details')->create($item);
+                ship_detail::create($item);
             }
+            // return $data;
 
             $delivery_status = DB::table('delivery_status')->find($new_shipping->delivery_status_id);
             $sub_delivery_status = DB::table('sub_status_deliveries')->find($new_shipping->sub_delivery_status_id);
@@ -78,12 +82,13 @@ class ShippingController extends Controller
             // ]);
         }
     }
-    public function GetShipping(Request $request){
-        $GetShipping = DB::table('shippings')->select('shippings.shipping_code','delivery_status.name as delivery_status_name','description_delivery','description_sub_status')
-        ->where('shippings.shipping_code','=' ,$request->code)
-        ->join('delivery_status','delivery_status.id','=','shippings.delivery_status_id')
-        ->join('sub_status_deliveries','sub_status_deliveries.id','=','shippings.sub_delivery_status_id')
-        ->first();
-           return response()->json($GetShipping);
+    public function GetShipping(Request $request)
+    {
+        $GetShipping = DB::table('shippings')->select('shippings.shipping_code', 'delivery_status.name as delivery_status_name', 'description_delivery', 'description_sub_status')
+            ->where('shippings.shipping_code', '=', $request->code)
+            ->join('delivery_status', 'delivery_status.id', '=', 'shippings.delivery_status_id')
+            ->join('sub_status_deliveries', 'sub_status_deliveries.id', '=', 'shippings.sub_delivery_status_id')
+            ->first();
+        return response()->json($GetShipping);
     }
 }

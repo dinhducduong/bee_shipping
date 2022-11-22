@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\ShipDetailController;
+use App\Http\Controllers\ShippingController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,6 +16,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+
+
+Route::post('/create-shipping',[ShippingController::class,'CreateShipping']);
+Route::get('/get-shipping',[ShippingController::class,"GetShipping"]);
+Route::post('/test',[ShipDetailController::class,'test']);
+
+Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+
+// dang giao, thong quan, da nhan dc hang

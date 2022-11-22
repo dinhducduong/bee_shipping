@@ -206,17 +206,15 @@
                     $('#token').val(data.token)
                 }
             });
-        }, 60000);
-
+        }, 5000);
         $('#submit_update').click(function() {
-
             var data = {
-                'DeliveryStatus': $('#inputState1').val(),
-                'SubDeliveryStatus': $('#inputState2').val(),
-                'shipping_id': $('#id_ship').val()
+                'DeliveryStatus': parseInt($('#inputState1').val()),
+                'SubDeliveryStatus': parseInt($('#inputState2').val()),
+                'shipping_id': parseInt($('#id_ship').val())
             }
             $.ajax({
-                url: "http://127.0.0.1:8000/shippings",
+                url: "/shippings",
                 type: 'PUT',
                 data: {
                     _token: $('#token').val(),
@@ -224,35 +222,10 @@
                 },
                 success: function(data) {
                     alert(data)
+                    // console.log(data);
                     location.reload();
-
                 }
             });
-
-
         })
-
-
-
-
-
-        // $('.status').change(function() {
-        //     var data = {
-        //         id_change: $(this).val(),
-        //         shipping_id: $(this).attr("id")
-        //     }
-        //     $.ajax({
-        //         url: "/shippings",
-        //         type: 'PUT',
-
-        //         data: {
-        //             _token: "{{ csrf_token() }}",
-        //             update_shipping: data
-        //         },
-        //         success: function(data) {
-        //             alert(data)
-        //         }
-        //     });
-        // })
     });
 </script>

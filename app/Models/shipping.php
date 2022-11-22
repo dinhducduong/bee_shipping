@@ -1,11 +1,12 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
 class shipping extends Model
 {
+    protected $table = 'shippings';
     protected $fillable = [
         'shipping_code',
         'name',
