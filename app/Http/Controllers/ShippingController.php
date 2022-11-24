@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\delivery_status;
 use App\Models\ship_detail;
 use App\Models\shipping;
+use App\Models\SubStatus_delivery;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -47,27 +49,27 @@ class ShippingController extends Controller
                 'weight' =>  $request->weight,
                 'height' =>  $request->height,
                 'delivery_status_id' => 4,
-                'sub_delivery_status_id' => 63,
-                'latest_change_status' => 63,
+                'sub_delivery_status_id' => 61,
+                'latest_change_status' => 61,
                 'lastest_checkpoint_time' => Carbon::now(),
                 'note' =>  $request->note,
             ];
             
             $new_shipping = shipping::create($data);
 
-            foreach ($request->ship_detail as $value) {
-                $item = [
-                    "ship_id" => $new_shipping->id,
-                    "name" => $value['name'],
-                    "code" => $value['code'],
-                    "quantity" => $value['quantity'],
-                    "price" => $value['price']
-                ];
-                ship_detail::create($item);
-            }
+            // foreach ($request->ship_detail as $value) {
+            //     $item = [
+            //         "ship_id" => $new_shipping->id,
+            //         "name" => $value['name'],
+            //         "code" => $value['code'],
+            //         "quantity" => $value['quantity'],
+            //         "price" => $value['price']
+            //     ];
+            //     ship_detail::create($item);
+            // }
 
-            $delivery_status = DB::table('delivery_status')->find($new_shipping->delivery_status_id);
-            $sub_delivery_status = DB::table('sub_status_deliveries')->find($new_shipping->sub_delivery_status_id);
+            $delivery_status = delivery_status::find($new_shipping->delivery_status_id);
+            $sub_delivery_status = SubStatus_delivery::find($new_shipping->sub_delivery_status_id);
             return response()->json([
                 'shipping_code' => $shipping_code,
                 'delivery_status' => $delivery_status->name,
