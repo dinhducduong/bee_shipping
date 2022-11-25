@@ -53,6 +53,7 @@ class ShipingsController extends Controller
 
 
             Http::post('http://127.0.0.1:8000/api/create-log-tracking', [
+                'delivery_status' => (int) $request['update_shipping']['DeliveryStatus'],
                 'shipping_code' => $shipping->shipping_code,
                 'tracking_status_name' => $sub_delivery_status->description_sub_status,
                 'status_name' => $sub_delivery_status->name,
