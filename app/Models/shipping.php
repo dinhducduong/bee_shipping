@@ -14,12 +14,13 @@ class shipping extends Model
         'email',
         'ship_from',
         'ship_to',
-         'weight',
-         'height',
-         'delivery_status_id',
-         'sub_delivery_status_id',
-         'latest_change_status',
-         'lastest_checkpoint_time',
-         'note'
+        'fee_service',
+        'weight',
+        'height',
+        'delivery_status_id',
+        'sub_delivery_status_id',
+        'latest_change_status',
+        'lastest_checkpoint_time',
+        'note'
     ];
-}   
+}

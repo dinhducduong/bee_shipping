@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::post('/create-shipping',[ShippingController::class,'CreateShipping']);
+Route::post('/update-shipping',[ShippingController::class,'UpdateShipping']);
 Route::get('/get-shipping',[ShippingController::class,"GetShipping"]);
 Route::post('/test',[ShipDetailController::class,'test']);
 

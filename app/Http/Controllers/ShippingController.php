@@ -13,31 +13,44 @@ use Illuminate\Support\Facades\Validator;
 
 class ShippingController extends Controller
 {
+    public function UpdateShipping(Request $request)
+    {
+        try {
+            if ($request->weight_from_volume > 0 && $request->weight_from_volume <= 5) {
+                $fee_service = 40000;
+            } else if ($request->weight_from_volume > 5 && $request->weight_from_volume <= 20) {
+                $fee_service = 70000;
+            } else if ($request->weight_from_volume > 20 && $request->weight_from_volume <= 100) {
+                $fee_service = 100000;
+            } else if ($request->weight_from_volume > 100) {
+                $fee_service = 200000;
+            }
+            DB::table('shippings')->where('shipping_code', '=', $request->code)->update(
+                [
+                    'weight' =>  $request->weight,
+                    'fee_service' => $fee_service,
+                ]
+            );
+            
+            return response()->json([
+                'fee_service' => $fee_service,
+            ]);
+        }catch (\Throwable $th) {
+            return response()->json(['error' => "Hệ thống đang lỗi vui lòng thử lại sau!"], 400);
+        }
+    }
     public function CreateShipping(Request $request)
     {
-        // $validator = validator::make(
-        //     $request->all(),
-        //     [
-        //         'name' => 'required',
-        //         'phone' => 'required|numeric',
-        //         'email' => 'required|email',
-        //         'ship_from' => 'required',
-        //         'ship_to' => 'required',
-        //         'weight' => 'required',
-        //         'height' => 'required',
-        //         'note' => 'required',
-        //     ]
-        // );
-
-        // if ($validator->fails()) {
-        //     return response()->json(['errors' => $validator->errors()]);
-        // }
-
-        // if(empty($request->ship_detail)){
-        //     return response()->json(['errors' => 'empty package please check again']);
-        // }
-
         try {
+            if ($request->weight_from_volume > 0 && $request->weight_from_volume <= 5) {
+                $fee_service = 40000;
+            } else if ($request->weight_from_volume > 5 && $request->weight_from_volume <= 20) {
+                $fee_service = 70000;
+            } else if ($request->weight_from_volume > 20 && $request->weight_from_volume <= 100) {
+                $fee_service = 100000;
+            } else if ($request->weight_from_volume > 100) {
+                $fee_service = 200000;
+            }
             $shipping_code = "PX" . date("YmdHis");
             $data = [
                 'shipping_code' => $shipping_code,
@@ -47,6 +60,7 @@ class ShippingController extends Controller
                 'ship_from' =>  $request->ship_from,
                 'ship_to' =>  $request->ship_to,
                 'weight' =>  $request->weight,
+                'fee_service' =>  $fee_service,
                 'height' =>  $request->height,
                 'delivery_status_id' => 4,
                 'sub_delivery_status_id' => 61,
@@ -54,33 +68,20 @@ class ShippingController extends Controller
                 'lastest_checkpoint_time' => Carbon::now(),
                 'note' =>  $request->note,
             ];
-            
-            $new_shipping = shipping::create($data);
 
-            // foreach ($request->ship_detail as $value) {
-            //     $item = [
-            //         "ship_id" => $new_shipping->id,
-            //         "name" => $value['name'],
-            //         "code" => $value['code'],
-            //         "quantity" => $value['quantity'],
-            //         "price" => $value['price']
-            //     ];
-            //     ship_detail::create($item);
-            // }
+            $new_shipping = shipping::create($data);
 
             $delivery_status = delivery_status::find($new_shipping->delivery_status_id);
             $sub_delivery_status = SubStatus_delivery::find($new_shipping->sub_delivery_status_id);
             return response()->json([
+                'fee_service' => $fee_service,
                 'shipping_code' => $shipping_code,
                 'delivery_status' => $delivery_status->name,
                 'sub_delivery_status' => $sub_delivery_status->description_sub_status,
                 'lastest_checkpoint_time' => $new_shipping->lastest_checkpoint_time
             ]);
-        } catch (\Throwable $th) {
-            // return response()->json([
-            //     'error' => true,
-            //     'message' => 'abc'
-            // ]);
+        }catch (\Throwable $th) {
+            return response()->json(['error' => "Hệ thống đang lỗi vui lòng thử lại sau!"], 400);
         }
     }
     public function GetShipping(Request $request)
