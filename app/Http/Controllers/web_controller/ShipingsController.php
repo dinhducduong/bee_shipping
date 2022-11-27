@@ -60,7 +60,7 @@ class ShipingsController extends Controller
             ]);
 
 
-            // return "Chỉnh sửa đơn hàng " . $shipping->shipping_code . " thành công !";
+            return "Chỉnh sửa đơn hàng " . $shipping->shipping_code . " thành công !";
         } catch (\Throwable $th) {
             return "404 not found";
         }

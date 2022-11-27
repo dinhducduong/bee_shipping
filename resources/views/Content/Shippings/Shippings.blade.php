@@ -12,7 +12,7 @@
                         <thead>
                             <tr>
                                 <th> Shipping Code</th>
-                                <th>User Name</th>
+                                <th>Sender</th>
                                 <th>Amount</th>
                                 <th>Status</th>
                                 <th width="150px">Date</th>
@@ -221,9 +221,9 @@
                     update_shipping: data
                 },
                 success: function(data) {
-                    // alert(data)
+                    alert(data)
                     console.log(data);
-                    // location.reload();
+                    location.reload();
                 }
             });
         })
